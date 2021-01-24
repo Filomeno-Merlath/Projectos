@@ -61,16 +61,73 @@ public class JavaTesterController {
 
     @GetMapping(path ="", produces = MediaType.APPLICATION_JSON_VALUE)
     public boolean getEvacuation(@PathVariable("fire") boolean isfire, 
-    @PathVariable("numberOfCovids") int covidnumber,
+    @PathVariable("numberOfCovids") int covidNumber,
     @PathVariable("powerShutdown") boolean powerStatus,@PathVariable("comeBackTime") double backTime){
 
-        if(isfire || covidnumber > 5 || (!powerStatus && backTime >15)){
+        if(isfire || covidNumber > 5 || (!powerStatus && backTime >15)){
             return true;
         }
         return false;
     }
 
     /*--- Arrays, Conditionals and Loops ---*/
-    private 
+    private double grades[]= {10.3, 9.8, 14,5};
+    private String ucs[]= {"FP", "POO", "BD"};
+
+    @GetMapping(path="/academic/average", produces= MediaType.APPLICATION_JSON_VALUE)
+    public double getAverage(){
+        logger.info("");
+        double total = 0;
+
+        for(double s:grades){
+        total += s;
+        }
+        return total/ grades.length;
+    }
+
+    @GetMapping(path="",produces= MediaType.APPLICATION_JSON_VALUE)
+    public double maxGrade(){
+        logger.info("");
+        double actMax = 0;
+        for(double s:grades){
+            if(s>actMax)
+            actMax=s;
+        }
+        return actMax;
+    }
+
+    @GetMapping(path="", produces= MediaType.APPLICATION_JSON_VALUE)
+    public double ucGrade(@PathVariable("unCu") String unCu){
+        logger.info("");
+        if(unCu.equals("FP")){
+            return grades[0];
+        }else if(unCu.equals("POO")){
+            return grades[1];
+        }else if(unCu.equals("BD")){
+            return grades[2];
+        }
+        return Double.NaN;
+    }
+
+    @GetMapping(path="", produces= MediaType.APPLICATION_JSON_VALUE)
+    public int ucInRange(@PathVariable("minGrade") double min, @PathVariable("maxGrade") double max){
+        logger.info("");
+        int numUcInRange=0;
+        for(double s : grades){
+        if(s >= min && s <= max)
+            numUcInRange++;}
+
+        return numUcInRange;
+    }
+
+    @GetMapping(path="", produces= MediaType.APPLICATION_JSON_VALUE)
+    public String gradesUcs(){
+
+        String ucGrades="";
+        for(int i = 0; i < ucs.length; i++)
+            ucGrades= ucs[i] +": "+ grades[i] +".";
+
+        return ucGrades;
+    }
 
 }
